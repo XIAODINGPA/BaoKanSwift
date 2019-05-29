@@ -10,24 +10,51 @@ import UIKit
 import SnapKit
 import Alamofire
 class BKUserLoginViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "首页"
-        view.backgroundColor = UIColor.init(white: 0, alpha: 0.2)
+        navigationItem.title = "登录"
+        view.backgroundColor = UIColor.init(white: 0.7, alpha: 1)
+        addNavigatioItem()
+        addBlurEffect()
         addChildView()
         layoutChildView()
         addKVOForTextField()
         loginBtn.isEnabled = false
+        
+       
         // Do any additional setup after loading the view.
         
     }
     
     
     func addNavigatioItem() {
-        let closeBarButtonItem = UIBarButtonItem(title: "close", style: .plain, target: self, action: #selector(closeLoginView))
-        navigationItem.leftBarButtonItem = closeBarButtonItem
+        let closeBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(closeLoginView))
+        navigationItem.rightBarButtonItem = closeBarButtonItem
         
+    }
+    
+    func addBlurEffect() {
+        let imageView = UIImageView(frame: view.bounds)
+        imageView.image = UIImage(named: "img_login_bg.jpeg")
+        view.addSubview(imageView)
+        
+        // Blur Effect 模糊效果
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.extraLight)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        
+        //添加到当前view上
+        view.addSubview(blurEffectView)
+        
+        // Vibrancy Effect 生动效果
+        let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
+        let vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
+        vibrancyEffectView.frame = view.bounds
+        
+        //添加label到vibrancyView的contentView上
+        //添加vibrancyView到blurView的contentView上
+        blurEffectView.contentView.addSubview(vibrancyEffectView)
     }
     
     func addChildView() {
@@ -36,6 +63,8 @@ class BKUserLoginViewController: UIViewController {
         view.addSubview(loginBtn)
         view.addSubview(QQLoginBtn)
         view.addSubview(WeiBoLoginBtn)
+        
+       
     }
     
     func layoutChildView() {
@@ -59,14 +88,20 @@ class BKUserLoginViewController: UIViewController {
             make.top.equalTo(passwordTF.snp.bottom).offset(25)
             make.left.equalTo(view).offset(25)
             make.right.equalTo(view).offset(-25)
-            make.height.equalTo(50)
+            make.height.equalTo(55)
             
         }
         
         // QQ 微博 等间距排列
         let margin = (view.bounds.width - (50 * 2))/3
         QQLoginBtn.snp.makeConstraints { (make) in
-            make.bottom.equalTo(view.snp.bottom).offset(-50)
+            if #available(iOS 11.0, *) {
+                make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
+            } else {
+                make.bottom.equalTo(view.snp.bottom).offset(-50)
+
+                // Fallback on earlier versions
+            }
             make.left.equalTo(view.snp_left).offset(margin)
             //            make.right.equalTo(view).offset(-(view.bounds.width/2 + 25))
             make.size.equalTo(CGSize(width: 50, height: 50))
@@ -81,6 +116,20 @@ class BKUserLoginViewController: UIViewController {
             
         }
         
+        firstSepLine.snp.makeConstraints { (make) in
+            make.bottom.equalTo(usernameTF.snp.bottom)
+            make.left.equalTo(usernameTF)
+            make.right.equalTo(usernameTF.snp.right)
+            make.height.equalTo(1)
+        }
+        
+        secondSepLine.snp.makeConstraints { (make) in
+            make.bottom.equalTo(passwordTF.snp.bottom)
+            make.left.equalTo(passwordTF)
+            make.right.equalTo(passwordTF.snp.right)
+            make.height.equalTo(1)
+        }
+        
     }
     
     func addKVOForTextField() {
@@ -92,11 +141,10 @@ class BKUserLoginViewController: UIViewController {
     lazy var usernameTF: UITextField = {
         let usernameTF = UITextField()
         usernameTF.text = ""
-        usernameTF.delegate = self as! UITextFieldDelegate
+        usernameTF.delegate = self as UITextFieldDelegate
         usernameTF.textColor = .black
-        usernameTF.backgroundColor = .white
-        usernameTF.font = UIFont.systemFont(ofSize: 16)
-        usernameTF.attributedPlaceholder = NSMutableAttributedString.init(string: "用户名", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16),NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        usernameTF.font = UIFont.systemFont(ofSize: 18)
+        usernameTF.attributedPlaceholder = NSMutableAttributedString.init(string: "用户名", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16),NSAttributedString.Key.foregroundColor : UIColor.init(white: 153/255, alpha: 1)])
         usernameTF.clearButtonMode = UITextField.ViewMode.whileEditing
         return usernameTF
     }()
@@ -104,13 +152,30 @@ class BKUserLoginViewController: UIViewController {
     lazy var passwordTF: UITextField = {
         let passwordTF = UITextField()
         passwordTF.text = ""
-        usernameTF.delegate = self as? UITextFieldDelegate
+        usernameTF.delegate = self as UITextFieldDelegate
         passwordTF.textColor = .black
-        passwordTF.backgroundColor = .white
-        passwordTF.font = UIFont.systemFont(ofSize: 16)
-        passwordTF.attributedPlaceholder = NSMutableAttributedString.init(string: "请输入密码", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16),NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        passwordTF.isSecureTextEntry = true
+        passwordTF.font = UIFont.systemFont(ofSize: 18)
+        passwordTF.attributedPlaceholder = NSMutableAttributedString.init(string: "请输入密码", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16),NSAttributedString.Key.foregroundColor : UIColor.init(white: 153/255, alpha: 1)])
         passwordTF.clearButtonMode = UITextField.ViewMode.whileEditing
         return passwordTF
+    }()
+    
+    lazy var firstSepLine: UIView = {
+        let firstSepLine = UIView()
+        firstSepLine.backgroundColor = UIColor.init(white: 153/255, alpha: 1)
+        usernameTF.addSubview(firstSepLine)
+        
+        return firstSepLine
+    }()
+    
+    lazy var secondSepLine: UIView = {
+        let secondSepLine = UIView()
+        secondSepLine.backgroundColor = UIColor.init(white: 153/255, alpha: 1)
+        passwordTF.addSubview(secondSepLine)
+        
+        
+        return secondSepLine
     }()
     
     lazy var loginBtn: UIButton = {
@@ -118,8 +183,9 @@ class BKUserLoginViewController: UIViewController {
         loginBtn.setTitle("登录", for: .normal)
         loginBtn.setTitleColor(.white, for: .normal)
         loginBtn.backgroundColor = UIColor.init(white: 0, alpha: 0.2)
-        loginBtn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        loginBtn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         loginBtn.addTarget(self, action: #selector(loginAction), for: UIControl.Event.touchUpInside)
+        loginBtn.layer.cornerRadius = 8
         return loginBtn
     }()
     
@@ -191,19 +257,16 @@ class BKUserLoginViewController: UIViewController {
     
     @objc func closeLoginView(){
         print("closeLoginView 点击关闭按钮")
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func textfieldTextDidChange(textField: UITextField){
         guard let username :String = usernameTF.text, let passwordTF :String = passwordTF.text else { return  }
         let isEnabled = username.count > 0 && passwordTF.count > 0
         self.loginBtn.isEnabled = isEnabled
-        self.loginBtn.backgroundColor =  isEnabled ?  .orange : UIColor.init(white: 0, alpha: 0.2)
-        //        UIView.animate(withDuration: 0.1, delay: 0.01, options: UIView.AnimationOptions.transitionCrossDissolve, animations: {
-        //            self.loginBtn.isEnabled = isEnabled
-        //            self.loginBtn.backgroundColor =  isEnabled ?  .orange : UIColor.init(white: 0, alpha: 0.2)
-        //        }) { (true) in
-        //
-        //        }
+        self.loginBtn.backgroundColor =  isEnabled ?  .red : UIColor.init(white: 0, alpha: 0.2)
+        firstSepLine.backgroundColor = username.count > 0 ? .red : UIColor.init(white: 153/255, alpha: 1)
+        secondSepLine.backgroundColor = passwordTF.count > 0 ? .red : UIColor.init(white: 153/255, alpha: 1)
         
     }
     

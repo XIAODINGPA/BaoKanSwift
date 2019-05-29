@@ -12,7 +12,8 @@ class BKNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+       let navigationBar =  UINavigationBar.appearance()
+       navigationBar.tintColor = .black
         // Do any additional setup after loading the view.
     }
     

@@ -25,6 +25,8 @@
 		157F0FA2229D3CC600BADE81 /* BKUserLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 157F0FA1229D3CC600BADE81 /* BKUserLoginViewController.swift */; };
 		1ADB89DECF79027A39F99B2F /* Pods_BaoKanIOSDemoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C6A8A86E178574F1F1BE87 /* Pods_BaoKanIOSDemoUITests.framework */; };
 		7AD0A1FCBBBF3F8A473BE276 /* Pods_BaoKanIOSDemoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FBEC715CFC3DBCDA4BAAC74 /* Pods_BaoKanIOSDemoTests.framework */; };
+		9FC7E205229D6B1F00FE794D /* UIImage+Addition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7E204229D6B1F00FE794D /* UIImage+Addition.swift */; };
+		9FC7E208229D779E00FE794D /* UIViewController+Addition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC7E207229D779E00FE794D /* UIViewController+Addition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +76,8 @@
 		41C6A8A86E178574F1F1BE87 /* Pods_BaoKanIOSDemoUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BaoKanIOSDemoUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4771B52B77E9D672DA289BD6 /* Pods-BaoKanIOSDemoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaoKanIOSDemoUITests.debug.xcconfig"; path = "Target Support Files/Pods-BaoKanIOSDemoUITests/Pods-BaoKanIOSDemoUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		8D6732CDD12663EB1C67178F /* Pods_BaoKanIOSDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BaoKanIOSDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9FC7E204229D6B1F00FE794D /* UIImage+Addition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Addition.swift"; sourceTree = "<group>"; };
+		9FC7E207229D779E00FE794D /* UIViewController+Addition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Addition.swift"; sourceTree = "<group>"; };
 		CEA3C848F4A2BC6DE458923E /* Pods-BaoKanIOSDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaoKanIOSDemo.release.xcconfig"; path = "Target Support Files/Pods-BaoKanIOSDemo/Pods-BaoKanIOSDemo.release.xcconfig"; sourceTree = "<group>"; };
 		E48EB832176A55D0AB8C0CB1 /* Pods-BaoKanIOSDemoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaoKanIOSDemoUITests.release.xcconfig"; path = "Target Support Files/Pods-BaoKanIOSDemoUITests/Pods-BaoKanIOSDemoUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E56E057852DAB70E7210D9BB /* Pods-BaoKanIOSDemoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BaoKanIOSDemoTests.debug.xcconfig"; path = "Target Support Files/Pods-BaoKanIOSDemoTests/Pods-BaoKanIOSDemoTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -162,6 +166,7 @@
 		157F0F6A229D072D00BADE81 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9FC7E202229D69E700FE794D /* Extension */,
 				157F0F6D229D074900BADE81 /* AppLication */,
 				157F0F6C229D074500BADE81 /* API */,
 				157F0F6B229D074300BADE81 /* Moudel */,
@@ -296,6 +301,15 @@
 			children = (
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		9FC7E202229D69E700FE794D /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				9FC7E204229D6B1F00FE794D /* UIImage+Addition.swift */,
+				9FC7E207229D779E00FE794D /* UIViewController+Addition.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		D94D6A6B0B6AD54E7C05F01D /* Frameworks */ = {
@@ -551,9 +565,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				157F0FA2229D3CC600BADE81 /* BKUserLoginViewController.swift in Sources */,
+				9FC7E205229D6B1F00FE794D /* UIImage+Addition.swift in Sources */,
 				157F0F98229D0BA800BADE81 /* BKAppConfig.swift in Sources */,
 				157F0F96229D0B3E00BADE81 /* BKTabbarController.swift in Sources */,
 				157F0F92229D0A4300BADE81 /* BKUserCenterViewController.swift in Sources */,
+				9FC7E208229D779E00FE794D /* UIViewController+Addition.swift in Sources */,
 				157F0F6F229D077F00BADE81 /* API.swift in Sources */,
 				157F0F8E229D0A1E00BADE81 /* BKPhotoShowViewController.swift in Sources */,
 				157F0F8C229D0A0800BADE81 /* BKNewsViewController.swift in Sources */,

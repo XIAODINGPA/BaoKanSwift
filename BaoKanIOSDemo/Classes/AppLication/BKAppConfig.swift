@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// 配置APP window 根控制器
 class BKAppConfig: NSObject {
     let tabbarCtr = BKTabbarController()
     
@@ -30,8 +31,12 @@ class BKAppConfig: NSObject {
 
             i += 1
         }
+    
 
-
+       let tabbar = UITabBar.appearance()
+       tabbar.isTranslucent = true
+       tabbar.shadowImage = UIImage()
+       tabbar.backgroundImage = UIImage()
        return tabbarCtr
     }
     
@@ -45,16 +50,11 @@ class BKAppConfig: NSObject {
         let image = UIImage(named: image ?? "")
         let selectedImage = UIImage(named: selectedImage ?? "")
         child.tabBarItem.title = title
-        child.tabBarItem.image = image
-        child.tabBarItem.selectedImage = selectedImage
+        child.tabBarItem.image = image?.withRenderingMode(.alwaysOriginal)
+        child.tabBarItem.selectedImage = selectedImage?.withRenderingMode(.alwaysOriginal)
         child.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 12),NSAttributedString.Key.foregroundColor : UIColor.lightGray], for: UIControl.State.normal)
         child.tabBarItem.setTitleTextAttributes([NSAttributedString.Key.font : UIFont.systemFont(ofSize: 12),NSAttributedString.Key.foregroundColor : UIColor.red], for: UIControl.State.selected)
         
     }
 }
 
-extension UIImage {
-    func image(name: String) -> UIImage {
-        return UIImage(named: name) ?? UIImage()
-    }
-}

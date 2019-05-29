@@ -15,9 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        //初始化window
         window = UIWindow(frame: UIScreen.main.bounds)
+        //设置window背景颜色为白色
         window?.backgroundColor = .white
+        //设置window的根控制器
         window?.rootViewController = BKAppConfig().rootViewController()
+        //显示window
         window?.makeKeyAndVisible()
        
         return true
