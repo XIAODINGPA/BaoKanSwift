@@ -14,8 +14,10 @@ class BKNavigationController: UINavigationController {
         super.viewDidLoad()
        let navigationBar =  UINavigationBar.appearance()
        navigationBar.tintColor = .black
+       navigationBar.isTranslucent = false
         // Do any additional setup after loading the view.
     }
+    
     
     
     /*

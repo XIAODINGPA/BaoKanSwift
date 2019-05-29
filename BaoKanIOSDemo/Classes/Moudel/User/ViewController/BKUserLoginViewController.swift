@@ -13,28 +13,23 @@ class BKUserLoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "登录"
-        view.backgroundColor = UIColor.init(white: 0.7, alpha: 1)
         addNavigatioItem()
         addBlurEffect()
         addChildView()
         layoutChildView()
         addKVOForTextField()
-        loginBtn.isEnabled = false
-        
-       
-        // Do any additional setup after loading the view.
-        
     }
     
-    
-    func addNavigatioItem() {
+    //MARK:- 私有方法
+   fileprivate func addNavigatioItem() {
+        navigationItem.title = "登录"
+        view.backgroundColor = UIColor.init(white: 0.7, alpha: 1)
         let closeBarButtonItem = UIBarButtonItem(title: "关闭", style: .plain, target: self, action: #selector(closeLoginView))
         navigationItem.rightBarButtonItem = closeBarButtonItem
         
     }
     
-    func addBlurEffect() {
+  fileprivate func addBlurEffect() {
         let imageView = UIImageView(frame: view.bounds)
         imageView.image = UIImage(named: "img_login_bg.jpeg")
         view.addSubview(imageView)
@@ -57,17 +52,17 @@ class BKUserLoginViewController: UIViewController {
         blurEffectView.contentView.addSubview(vibrancyEffectView)
     }
     
-    func addChildView() {
+   fileprivate func addChildView() {
         view.addSubview(usernameTF)
         view.addSubview(passwordTF)
         view.addSubview(loginBtn)
         view.addSubview(QQLoginBtn)
         view.addSubview(WeiBoLoginBtn)
         
-       
+        
     }
     
-    func layoutChildView() {
+   fileprivate func layoutChildView() {
         usernameTF.snp.makeConstraints { (make) in
             make.top.equalTo(view).offset(120)
             make.left.equalTo(view).offset(25)
@@ -99,7 +94,7 @@ class BKUserLoginViewController: UIViewController {
                 make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-50)
             } else {
                 make.bottom.equalTo(view.snp.bottom).offset(-50)
-
+                
                 // Fallback on earlier versions
             }
             make.left.equalTo(view.snp_left).offset(margin)
@@ -132,12 +127,13 @@ class BKUserLoginViewController: UIViewController {
         
     }
     
-    func addKVOForTextField() {
+   fileprivate func addKVOForTextField() {
         usernameTF.addTarget(self, action: #selector(textfieldTextDidChange(textField:)), for: UIControl.Event.editingChanged)
         passwordTF.addTarget(self, action: #selector(textfieldTextDidChange(textField:)), for: UIControl.Event.editingChanged)
         
     }
     
+    //MARK:- 懒加载属性
     lazy var usernameTF: UITextField = {
         let usernameTF = UITextField()
         usernameTF.text = ""
@@ -152,7 +148,7 @@ class BKUserLoginViewController: UIViewController {
     lazy var passwordTF: UITextField = {
         let passwordTF = UITextField()
         passwordTF.text = ""
-        usernameTF.delegate = self as UITextFieldDelegate
+        passwordTF.delegate = self as UITextFieldDelegate
         passwordTF.textColor = .black
         passwordTF.isSecureTextEntry = true
         passwordTF.font = UIFont.systemFont(ofSize: 18)
@@ -180,6 +176,7 @@ class BKUserLoginViewController: UIViewController {
     
     lazy var loginBtn: UIButton = {
         let loginBtn = UIButton(type: .custom)
+        loginBtn.isEnabled = false
         loginBtn.setTitle("登录", for: .normal)
         loginBtn.setTitleColor(.white, for: .normal)
         loginBtn.backgroundColor = UIColor.init(white: 0, alpha: 0.2)
@@ -209,7 +206,7 @@ class BKUserLoginViewController: UIViewController {
         return WeiBoLoginBtn
     }()
     
-    
+    //MARK: - 点击事件
     /// QQ登陆
     @objc func  QQLoginAction() {
         
@@ -242,17 +239,17 @@ class BKUserLoginViewController: UIViewController {
             return
         }
         
-        Alamofire.request(URL(string: LOGIN)!, method: .post, parameters: ["username": username,"password":password], encoding: URLEncoding.default , headers: nil).responseJSON { (json) in
+        BKNetworkRequest().post(url: LOGIN, parameters: ["username": username as AnyObject ,"password":password as AnyObject ]) { (json) -> (Void) in
             let message = "** user login \n name=\(username) \n password=\(password) \njson=\(json)"
             print(message)
             let alertC = UIAlertController(title: "请求数据", message: message , preferredStyle: UIAlertController.Style.alert)
             alertC.addAction(UIAlertAction.init(title: "确定", style: UIAlertAction.Style.default, handler: { (action) in
-                self.dismiss(animated: true, completion: nil)
+                alertC.dismiss(animated: true, completion: nil)
             }))
             
-            self .present(alertC, animated: true, completion: nil)
+            self.present(alertC, animated: true, completion: nil)
         }
-        //        BKUserLoginService().userLogin(username: username, password: password)
+        
     }
     
     @objc func closeLoginView(){
@@ -273,11 +270,13 @@ class BKUserLoginViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
-
+    
 }
 
 extension BKUserLoginViewController : UITextFieldDelegate{
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
         return true
     }
     

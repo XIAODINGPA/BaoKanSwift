@@ -36,7 +36,7 @@ class BKAppConfig: NSObject {
        let tabbar = UITabBar.appearance()
        tabbar.isTranslucent = true
        tabbar.shadowImage = UIImage()
-       tabbar.backgroundImage = UIImage()
+//       tabbar.backgroundImage = UIImage()
        return tabbarCtr
     }
     

@@ -12,7 +12,19 @@ let BASE_URL = "http://www.baokan.tv/"
 
 // 接口路径
 let API_URL = "\(BASE_URL)e/bpi/"
+//MARK: - 用户模块
+/// 注册
+let REGISTER = "\(API_URL)Register.php"
 
+/// 登录
+let LOGIN = "\(API_URL)loginReq.php"
+
+/// 获取用户信息
+let GET_USERINFO = "\(API_URL)checkLoginStamp.php"
+
+/// 修改账号资料/找回密码
+let MODIFY_ACCOUNT_INFO = "\(API_URL)publicActions.php"
+//MARK: - 首页新闻
 /// 分类
 let GET_CLASS = "\(API_URL)getNewsClass.php"
 
@@ -31,14 +43,8 @@ let SUBMIT_COMMENT = "\(API_URL)subPlPost.php"
 /// 顶贴踩贴
 let TOP_DOWN = "\(API_URL)DoForPl.php"
 
-/// 注册
-let REGISTER = "\(API_URL)Register.php"
-
-/// 登录
-let LOGIN = "\(API_URL)loginReq.php"
-
-/// 获取用户信息
-let GET_USERINFO = "\(API_URL)checkLoginStamp.php"
+/// 获取用户评论列表
+let GET_USER_COMMENT = "\(API_URL)getUserComment.php"
 
 /// 获取用户收藏夹
 let GET_USER_FAVA = "\(API_URL)getUserFava.php"
@@ -48,13 +54,7 @@ let DEL_ACTIONS = "\(API_URL)dellActions.php"
 
 /// 增加删除收藏
 let ADD_DEL_FAVA = "\(API_URL)addFava.php"
-
-/// 修改账号资料/找回密码
-let MODIFY_ACCOUNT_INFO = "\(API_URL)publicActions.php"
-
-/// 获取用户评论列表
-let GET_USER_COMMENT = "\(API_URL)getUserComment.php"
-
+//MARK: - 新闻搜索模块
 /// 搜索
 let SEARCH = "\(API_URL)search.php"
 
