@@ -15,8 +15,7 @@ class BKNavigationController: UINavigationController {
        let navigationBar =  UINavigationBar.appearance()
        navigationBar.tintColor = .black
        navigationBar.isTranslucent = false
-//       navigationBar.barTintColor = UIColor(red: 211/255, green: 57/255, blue: 53/255, alpha: 1)
-        // Do any additional setup after loading the view.
+
     }
    
     override var childForStatusBarHidden: UIViewController? {

@@ -115,12 +115,14 @@ extension BKCircleSrollView: UIScrollViewDelegate{
 //        let offsetX = scrollView.contentOffset.x
 //        let page = offsetX / self.bounds.width
 //        pageControl.currentPage = Int(page)
+//
 //    }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let offsetX = scrollView.contentOffset.x
         let page = offsetX / self.bounds.width
         pageControl.currentPage = Int(page)
+       
     }
 }
 
