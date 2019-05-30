@@ -15,19 +15,24 @@ class BKNavigationController: UINavigationController {
        let navigationBar =  UINavigationBar.appearance()
        navigationBar.tintColor = .black
        navigationBar.isTranslucent = false
+//       navigationBar.barTintColor = UIColor(red: 211/255, green: 57/255, blue: 53/255, alpha: 1)
         // Do any additional setup after loading the view.
     }
-    
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+   
+    override var childForStatusBarHidden: UIViewController? {
+        return self.topViewController ?? UIViewController()
     }
-    */
+    
+    override var childForStatusBarStyle: UIViewController {
+        return self.topViewController ?? UIViewController()
+    }
+    
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        if(self.viewControllers.count > 0){
+            viewController.hidesBottomBarWhenPushed = true
+        }
+        super.pushViewController(viewController, animated: animated)
 
+    }
+    
 }

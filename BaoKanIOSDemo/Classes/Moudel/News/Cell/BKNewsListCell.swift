@@ -31,13 +31,13 @@ class BKNewsListCell: UITableViewCell {
             
         })
         self.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-        debugPrint("subviews ==> \(self.contentView.subviews)")
         
     }
     
     lazy var titleLabel: UILabel = {
         let titleLabel  = UILabel()
-        titleLabel.textColor = UIColor.init(white: 53/255, alpha: 1)
+        titleLabel.textColor = .black
+        //UIColor.init(white: 53/255, alpha: 1)
         titleLabel.font = UIFont.systemFont(ofSize: 16)
         titleLabel.numberOfLines = 02
         return titleLabel

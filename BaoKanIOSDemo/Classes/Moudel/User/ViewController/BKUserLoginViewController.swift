@@ -64,7 +64,13 @@ class BKUserLoginViewController: UIViewController {
     
    fileprivate func layoutChildView() {
         usernameTF.snp.makeConstraints { (make) in
-            make.top.equalTo(view).offset(120)
+            if #available(iOS 11.0, *) {
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(25)
+            } else {
+                // Fallback on earlier versions
+                make.top.equalToSuperview().offset(25)
+
+            }
             make.left.equalTo(view).offset(25)
             make.right.equalTo(view).offset(-25)
             make.height.equalTo(50)

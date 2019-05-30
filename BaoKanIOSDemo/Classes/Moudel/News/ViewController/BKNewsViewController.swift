@@ -10,11 +10,17 @@ import UIKit
 import SnapKit
 import Alamofire
 import JXSegmentedView
+
 class BKNewsViewController: UIViewController {
-    struct NewsClassItem {
-        var classid = ""
-        var classname = ""
+    
+    /// 新闻类目
+   fileprivate struct NewsClassItem {
         
+        // 类目id
+        var classid = ""
+        // 类目名
+        var classname = ""
+        // 构造函数 快速实例NewsClassItem
         init(classid: String,classname: String) {
             self.classid = classid
             self.classname = classname
@@ -22,32 +28,49 @@ class BKNewsViewController: UIViewController {
         
     }
     
-    var classItems = [NewsClassItem]()
+    /// 新闻类目数据源
+    fileprivate var classItems = [NewsClassItem]()
+    
+    /// 导航标题数据源
     public var segmentedDataSource: JXSegmentedBaseDataSource?
+    
+    /// 导航标题视图
     let segmentedView = JXSegmentedView()
     
+    /// 导航内容视图
     lazy var listContainerView: JXSegmentedListContainerView! = {
         return JXSegmentedListContainerView(dataSource: self)
     }()
     
+    /// 导航内容视图底部分割线
+    lazy var segmentedLine: UIView = {
+        let segmentedLine = UIView()
+        segmentedLine.backgroundColor = UIColor.init(white: 242/255, alpha: 1)
+        return segmentedLine
+    }()
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        return .default
+    }
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-        addNavigationItem()
-        addSegmentedTitle()
         view.backgroundColor = .white
-        
-        //segmentedViewDataSource一定要通过属性强持有！！！！！！！！！
-        segmentedView.dataSource = segmentedDataSource
-        segmentedView.delegate = self
-        view.addSubview(segmentedView)
-        
-        segmentedView.contentScrollView = listContainerView.scrollView
-        listContainerView.didAppearPercent = 0.01
-        view.addSubview(listContainerView)
-        segmentedView.addSubview(segmentedLine)
-     
+
+        //添加右侧登录按钮
+        addNavigationItem()
+        //设置导航标题数据源/样式
+        setUpSegmentedTitleDataSource()
+        //添加到view上
+        setUpSegmentedView()
+    
     }
     
+    @objc func circleAction() {
+        debugPrint("** ** ** ** ")
+    }
+    
+    //MARK: - 重载 视图生命周期
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -64,19 +87,53 @@ class BKNewsViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        //设置segmentedView listContainerView的位置
         let tabBarHeight = self.tabBarController?.tabBar.bounds.height ?? 0
         segmentedView.frame = CGRect(x: 0, y: 0, width: view.bounds.size.width, height: 40)
         listContainerView.frame = CGRect(x: 0, y: 40, width: view.bounds.size.width, height: view.bounds.size.height - 40 -  tabBarHeight)
         segmentedLine.frame = CGRect(x: 0, y: segmentedView.frame.maxY - 1/UIScreen.main.scale, width: segmentedView.bounds.width , height: 1/UIScreen.main.scale);
     }
+    //MARK: - 私有方法
+   fileprivate func addNavigationItem() {
+        navigationItem.title = "首页"
+        let rightBarBtn = UIBarButtonItem(title: "登录", style: .plain, target: self, action: #selector(tryLogin))
+//        rightBarBtn.setTitleTextAttributes([NSAttributedString.Key.foregroundColor : UIColor.white], for: .normal)
+        navigationItem.rightBarButtonItem = rightBarBtn
     
-    lazy var segmentedLine: UIView = {
-        let segmentedLine = UIView()
-        segmentedLine.backgroundColor = UIColor.init(white: 242/255, alpha: 1)
-        return segmentedLine
-    }()
+    }
     
-    func getNewsClassTitle() -> [String]{
+   fileprivate func setUpSegmentedTitleDataSource() {
+        
+        let dataSource = JXSegmentedTitleDataSource()
+        dataSource.isTitleColorGradientEnabled = true
+        dataSource.titles = loadNewsClassTitle()
+        //reloadData(selectedIndex:)一定要调用
+        dataSource.reloadData(selectedIndex: 0)
+        self.segmentedDataSource = dataSource
+        
+       //配置指示器样式
+        let indicator = JXSegmentedIndicatorLineView()
+        indicator.indicatorWidth = JXSegmentedViewAutomaticDimension
+        indicator.lineStyle = .lengthenOffset
+        self.segmentedView.indicators = [indicator]
+    }
+    
+   fileprivate func setUpSegmentedView() {
+        //segmentedViewDataSource一定要通过属性强持有！！！！！！！！！
+        segmentedView.dataSource = segmentedDataSource
+        segmentedView.delegate = self
+        view.addSubview(segmentedView)
+        
+        segmentedView.contentScrollView = listContainerView.scrollView
+        listContainerView.didAppearPercent = 0.01
+        view.addSubview(listContainerView)
+        segmentedView.addSubview(segmentedLine)
+    }
+   
+   /// 数据解析 模型化
+   ///
+   /// - Returns: 标题数组
+   fileprivate func loadNewsClassTitle() -> [String]{
         var classTitles = [String]()
         let dataArray = getClassData()
         for dict in dataArray {
@@ -87,58 +144,17 @@ class BKNewsViewController: UIViewController {
             classTitles.append(classname)
         }
         return classTitles
-
-    }
-    
-    func addNavigationItem() {
-        navigationItem.title = "首页"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "登录", style: .plain, target: self, action: #selector(tryLogin))
-    }
-    
-    func addSegmentedTitle(){
         
-        let dataSource = JXSegmentedTitleDataSource()
-        dataSource.isTitleColorGradientEnabled = true
-        dataSource.titles = getNewsClassTitle()
-        //reloadData(selectedIndex:)一定要调用
-        dataSource.reloadData(selectedIndex: 0)
-        self.segmentedDataSource = dataSource
-        
-//        //配置指示器
-//        let indicator = JXSegmentedIndicatorLineView()
-//        indicator.indicatorWidth = JXSegmentedViewAutomaticDimension
-//        indicator.lineStyle = .lengthenOffset
-//
-//        self.segmentedView.indicators = [indicator]
     }
     
-    @objc func tryLogin() {
-       let loginVC = BKUserLoginViewController()
-       self.present(UINavigationController(rootViewController: loginVC), animated: true, completion: nil)
-    }
-
-    //MARK: 数字刷新demo
-    @objc func hanldeNumberRefresh()
-    {
-        if let _segDataSource = segmentedDataSource as? JXSegmentedNumberDataSource {
-            let newNumbers = [223, 12, 435, 332, 0, 32, 98, 0, 99999, 112]
-            _segDataSource.numberHeight = 18
-            _segDataSource.numberOffset = CGPoint(x: -5, y: 5)
-            _segDataSource.numbers = newNumbers
-            _segDataSource.reloadData(selectedIndex: 0)
-            segmentedView.reloadData()
-        }
-    }
-    
-    func getClassData() -> [[String:String]] {
+   /// 数据本地写死
+   ///
+   /// - Returns: 标题初始数据源
+   fileprivate func getClassData() -> [[String:String]] {
         return  [
             [
                 "classid" : "0",
                 "classname" : "今日头条"
-            ],
-            [
-                "classid" : "2",
-                "classname": "网文快讯"
             ],
             [
                 "classid" : "21",
@@ -172,13 +188,20 @@ class BKNewsViewController: UIViewController {
                 "classid" : "396",
                 "classname": "独家报道"
             ],
-            [
-                "classid" : "119",
-                "classname": "求职招聘"
-            ],
+
         ]
     }
     
+}
+
+// MARK: - 此区域存放点击事件
+extension BKNewsViewController {
+    
+    @objc func tryLogin() {
+        let loginVC = BKUserLoginViewController()
+        self.present(UINavigationController(rootViewController: loginVC), animated: true, completion: nil)
+    }
+
 }
 
 extension BKNewsViewController: JXSegmentedViewDelegate {
@@ -215,6 +238,7 @@ extension BKNewsViewController: JXSegmentedListContainerViewDataSource {
     func listContainerView(_ listContainerView: JXSegmentedListContainerView, initListAt index: Int) -> JXSegmentedListContainerViewListDelegate {
         let newsListVC = BKNewsListBaseViewController()
         let classId = classItems[index].classid
+        newsListVC.navigationC =  self.navigationController
         newsListVC.relodData(id: classId)
         return newsListVC
     }

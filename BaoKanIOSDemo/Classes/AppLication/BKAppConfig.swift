@@ -32,7 +32,7 @@ class BKAppConfig: NSObject {
             i += 1
         }
     
-
+       UINavigationBar.appearance().isTranslucent = false
        let tabbar = UITabBar.appearance()
        tabbar.isTranslucent = true
        tabbar.shadowImage = UIImage()
