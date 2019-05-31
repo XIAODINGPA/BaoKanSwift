@@ -30,6 +30,12 @@ class BKCircleSrollView: UIView {
     public func setImageArrays(images: Array<String?>){
         imageArray = images
         pageControl.numberOfPages = imageArray.count
+//        if imageArray.count > 1 {
+//            let first = imageArray.first as? String
+//            let last = imageArray.last as? String
+//            imageArray.insert(last , at: 0)
+//            imageArray.append(first)
+//        }
         collectionView.reloadData()
     }
     
@@ -59,12 +65,14 @@ class BKCircleSrollView: UIView {
         flowLayout.scrollDirection = UICollectionView.ScrollDirection.horizontal
         let collectionView = UICollectionView(frame: self.bounds, collectionViewLayout: flowLayout)
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.bounces = false
+        //collectionView.bounces = false
         collectionView.isPagingEnabled = true
         collectionView.backgroundColor = UIColor.white
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(BKCircleImageCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+       
+
         if #available(iOS 11.0, *) {
             collectionView.contentInsetAdjustmentBehavior = UIScrollView.ContentInsetAdjustmentBehavior.never
         } else {
@@ -81,7 +89,7 @@ class BKCircleSrollView: UIView {
     
     func startTimer() {
         timer =  Timer(timeInterval: 2, target: self, selector: #selector(circle), userInfo: nil, repeats: true)
-//        RunLoop.main.add(timer, forMode: RunLoop.Mode.common)
+        RunLoop.main.add(timer, forMode: RunLoop.Mode.common)
      
     }
     
@@ -96,9 +104,18 @@ class BKCircleSrollView: UIView {
         
         return
     }
-    collectionView.scrollToItem(at:IndexPath(item: 2, section: 0) , at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+   
+    if pageControl.currentPage == imageArray.count - 1{
+
+        collectionView.setContentOffset(CGPoint(x:  -CGFloat(imageArray.count) * self.bounds.width, y: 0), animated: false)
+      pageControl.currentPage = 0
+        return
     }
+//    collectionView.scrollToItem(at: IndexPath(item: pageControl.currentPage + 1, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: true)
+    collectionView.setContentOffset(CGPoint(x:  CGFloat(pageControl.currentPage + 1) * self.bounds.width, y: 0), animated: true)
+    pageControl.currentPage += 1
     
+  }
 }
 
 extension BKCircleSrollView: UIScrollViewDelegate{
@@ -111,17 +128,39 @@ extension BKCircleSrollView: UIScrollViewDelegate{
         self.startTimer()
     }
     
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
 //        let offsetX = scrollView.contentOffset.x
 //        let page = offsetX / self.bounds.width
-//        pageControl.currentPage = Int(page)
+//        if(Int(page) == imageArray.count - 1)
+//        {
+//            if(offsetX > 50)
+//            {
+////                scrollView.setContentOffset(CGPoint(x: -CGFloat(imageArray.count) * self.bounds.width, y: 0), animated: false)
+////                pageControl.currentPage = imageArray.count - 1
+//                return
+//            }
+//        }
 //
-//    }
+//        if(Int(page) == 0)
+//        {
+//            if(offsetX < 0)
+//            {
+//                scrollView.setContentOffset(CGPoint(x: -self.bounds.width, y: 0), animated: false)
+////                pageControl.currentPage = imageArray.count - 3
+//                return
+//
+//            }
+//        }
+
+    }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+
         let offsetX = scrollView.contentOffset.x
         let page = offsetX / self.bounds.width
-        pageControl.currentPage = Int(page)
+                pageControl.currentPage = Int(page)
+        debugPrint("page ==> \(page)")
        
     }
 }

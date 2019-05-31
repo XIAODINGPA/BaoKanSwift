@@ -1,6 +1,6 @@
 
 //
-//  BKUserCenterHeaderView.swift
+//  BKProfileHeaderView.swift
 //  BaoKanIOSDemo
 //
 //  Created by cyf on 2019/5/30.
@@ -9,7 +9,17 @@
 
 import UIKit
 
-class BKUserCenterHeaderView: UIView {
+class BKProfileHeaderView: UIView {
+    
+    enum ProfileHeaderEvent {
+        case collection
+        case comment
+        case info
+
+    }
+    
+    typealias ProfileHeaderViewBlock = (ProfileHeaderEvent) -> (Void)
+    var profileHeaderViewBlock: ProfileHeaderViewBlock?
     private let titles = ["收藏","评论","资料"]
     private let images = ["profile_topbar_collection","profile_topbar_comment","profile_topbar_info"]
     override init(frame: CGRect) {
@@ -21,9 +31,12 @@ class BKUserCenterHeaderView: UIView {
             let btn = UIButton(type: .custom)
             btn.tag = 10086 + i
 //            btn.frame = CGRect(x: CGFloat(i) * self.bounds.width/3, y: 0, width: self.bounds.width/3, height: 65)
+            btn.titleLabel?.font = UIFont.systemFont(ofSize: 16)
             btn.setTitleColor(.white, for: .normal)
             btn.setTitle(titles[i], for: .normal)
             btn.setImage(UIImage(named: images[i]), for: .normal)
+//            btn.imageEdgeInsets = UIEdgeInsets(top: 15, left: 0, bottom: 0, right: 0)
+            btn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 25, bottom: 0, right: 0)
             btn.addTarget(self, action: #selector(clickMenu(btn:)), for: UIControl.Event.touchUpInside)
             contentView.addSubview(btn)
             btn.snp.makeConstraints { (make) in
@@ -36,7 +49,26 @@ class BKUserCenterHeaderView: UIView {
     }
     
     @objc func clickMenu(btn: UIButton){
-        
+        debugPrint("btn tag == \(btn.tag)")
+        var profileHeaderEvent = ProfileHeaderEvent.collection
+        switch btn.tag {
+        case 10086:
+           profileHeaderEvent = ProfileHeaderEvent.collection
+            break
+        case 10087:
+            profileHeaderEvent = ProfileHeaderEvent.comment
+
+            break
+        case 10088:
+            profileHeaderEvent = ProfileHeaderEvent.info
+
+            break
+        default:
+            break
+        }
+        if let block = profileHeaderViewBlock  {
+            block(profileHeaderEvent)
+        }
     }
     
     override func layoutSubviews() {

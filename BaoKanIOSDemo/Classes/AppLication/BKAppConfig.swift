@@ -16,7 +16,7 @@ class BKAppConfig: NSObject {
        let news = BKNewsViewController()
        let photoShow = BKPhotoShowViewController()
        let homeNews = BKHotNewsViewController()
-       let userCenter = BKUserCenterViewController()
+       let userCenter = BKProfileViewController()
        let childViewControllers = [news,photoShow,homeNews,userCenter]
        let childTitles = ["首页","图秀","热门","我的"]
        let childImages = ["tabbar_news_normal","tabbar_media_normal","tabbar_reader_normal","tabbar_me_normal"]
